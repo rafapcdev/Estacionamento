@@ -35,7 +35,7 @@ app = FastAPI(
     title="Parking System API",
     description=(
         "API REST para gerenciamento de estacionamento. "
-        "Desenvolvida com **Clean Architecture** e **SOLID** como projeto didático."
+        "Desenvolvida com **Layered MVC** e **SOLID** como projeto didático."
     ),
     version="1.0.0",
     lifespan=lifespan,
