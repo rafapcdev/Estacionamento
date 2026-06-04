@@ -1,8 +1,12 @@
 import uuid
+from typing import List, TYPE_CHECKING
 from sqlalchemy import Boolean, String, Enum
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from app.database import Base
 from app.models.enums import SpotType
+
+if TYPE_CHECKING:
+    from app.models.ticket_model import Ticket
 
 class ParkingSpot(Base):
     __tablename__ = "parking_spots"
@@ -15,7 +19,7 @@ class ParkingSpot(Base):
     )
     occupied: Mapped[bool] = mapped_column(Boolean, default=False, nullable=False)
 
-    tickets: Mapped[list["Ticket"]] = relationship(
+    tickets: Mapped[List["Ticket"]] = relationship(
         "Ticket", back_populates="spot", lazy="select"
     )
 
