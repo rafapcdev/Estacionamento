@@ -1,0 +1,70 @@
+services:
+
+  # ─────────────────────────────────────────────
+  # Banco de dados PostgreSQL
+  # ─────────────────────────────────────────────
+  db:
+    image: postgres:16-alpine
+    container_name: parking_db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
+      POSTGRES_DB: ${POSTGRES_DB:-parking_db}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER:-postgres} -d $${POSTGRES_DB:-parking_db}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+  # ─────────────────────────────────────────────
+  # API FastAPI
+  # ─────────────────────────────────────────────
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: parking_api
+    restart: unless-stopped
+    environment:
+      DATABASE_URL: "postgresql+psycopg2://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:-postgres}@db:5432/${POSTGRES_DB:-parking_db}"
+      SQL_ECHO: ${SQL_ECHO:-false}
+    ports:
+      - "${PORT:-8000}:8000"
+    depends_on:
+      db:
+        condition: service_healthy
+    develop:
+      watch:
+        - action: sync
+          path: ./app
+          target: /app/app
+        - action: sync
+          path: ./main.py
+          target: /app/main.py
+        - action: rebuild
+          path: requirements.txt
+
+  # ─────────────────────────────────────────────
+  # Testes (roda e encerra)
+  # ─────────────────────────────────────────────
+  tests:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: parking_tests
+    environment:
+      DATABASE_URL: "sqlite:///:memory:"
+    command: >
+      sh -c "python -m pytest tests/ -v --tb=short"
+    profiles:
+      - test
+
+volumes:
+  postgres_data:
+    name: parking_postgres_data
