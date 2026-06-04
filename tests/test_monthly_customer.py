@@ -3,7 +3,7 @@ Tests: MonthlyCustomerService
 """
 
 import pytest
-from app.application.services.monthly_customer_service import MonthlyCustomerService
+from app.services.monthly_customer_service import MonthlyCustomerService
 
 
 class TestMonthlyCustomerService:

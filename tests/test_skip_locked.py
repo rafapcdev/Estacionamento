@@ -14,7 +14,7 @@ from decimal import Decimal
 
 class TestLockAvailableByType:
     def test_retorna_vaga_disponivel(self, spot_repo):
-        from app.domain.entities.parking_spot import ParkingSpot, SpotType
+        from app.models import ParkingSpot, SpotType
         spot_repo.save(ParkingSpot(spot_number="A-01", spot_type=SpotType.COMMON))
 
         resultado = spot_repo.lock_available_by_type(SpotType.COMMON)
@@ -24,7 +24,7 @@ class TestLockAvailableByType:
         assert not resultado.occupied
 
     def test_retorna_none_quando_todas_ocupadas(self, spot_repo):
-        from app.domain.entities.parking_spot import ParkingSpot, SpotType
+        from app.models import ParkingSpot, SpotType
         spot = spot_repo.save(ParkingSpot(spot_number="A-01", spot_type=SpotType.COMMON))
         spot.occupy()
         spot_repo.update(spot)
@@ -34,7 +34,7 @@ class TestLockAvailableByType:
         assert resultado is None
 
     def test_retorna_none_quando_tipo_nao_existe(self, spot_repo):
-        from app.domain.entities.parking_spot import ParkingSpot, SpotType
+        from app.models import ParkingSpot, SpotType
         spot_repo.save(ParkingSpot(spot_number="A-01", spot_type=SpotType.COMMON))
 
         resultado = spot_repo.lock_available_by_type(SpotType.MOTORCYCLE)
@@ -42,7 +42,7 @@ class TestLockAvailableByType:
         assert resultado is None
 
     def test_retorna_apenas_vaga_do_tipo_correto(self, spot_repo):
-        from app.domain.entities.parking_spot import ParkingSpot, SpotType
+        from app.models import ParkingSpot, SpotType
         spot_repo.save(ParkingSpot(spot_number="A-01", spot_type=SpotType.COMMON))
         spot_repo.save(ParkingSpot(spot_number="M-01", spot_type=SpotType.MOTORCYCLE))
 
@@ -57,8 +57,8 @@ class TestLockAvailableByType:
 class TestAlocacaoAtomicaViaEntryService:
     def test_segunda_entrada_falha_quando_sem_vagas(self, entry_service, spot_repo):
         """Com 1 vaga e 2 veículos, o segundo deve receber erro 'sem vagas'."""
-        from app.domain.entities.parking_spot import ParkingSpot, SpotType
-        from app.domain.entities.vehicle import Vehicle, VehicleType
+        from app.models import ParkingSpot, SpotType
+        from app.models import Vehicle, VehicleType
         import pytest
 
         spot_repo.save(ParkingSpot(spot_number="A-01", spot_type=SpotType.COMMON))
@@ -74,8 +74,8 @@ class TestAlocacaoAtomicaViaEntryService:
 
     def test_dois_carros_recebem_vagas_diferentes(self, entry_service, spot_repo):
         """Com 2 vagas e 2 veículos, cada um deve receber uma vaga diferente."""
-        from app.domain.entities.parking_spot import ParkingSpot, SpotType
-        from app.domain.entities.vehicle import Vehicle, VehicleType
+        from app.models import ParkingSpot, SpotType
+        from app.models import Vehicle, VehicleType
 
         spot_repo.save(ParkingSpot(spot_number="A-01", spot_type=SpotType.COMMON))
         spot_repo.save(ParkingSpot(spot_number="A-02", spot_type=SpotType.COMMON))

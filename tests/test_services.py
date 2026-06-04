@@ -7,8 +7,8 @@ Verifica o fluxo completo: entrada → permanência → saída com cobrança.
 import pytest
 from decimal import Decimal
 
-from app.domain.entities.vehicle import Vehicle, VehicleType
-from app.domain.entities.parking_spot import ParkingSpot, SpotType
+from app.models import Vehicle, VehicleType
+from app.models import ParkingSpot, SpotType
 
 
 # ─────────────────────────────────────────────

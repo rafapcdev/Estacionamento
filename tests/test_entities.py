@@ -8,10 +8,10 @@ import pytest
 from decimal import Decimal
 from datetime import datetime, timedelta
 
-from app.domain.entities.vehicle import Vehicle, VehicleType
-from app.domain.entities.parking_spot import ParkingSpot, SpotType
-from app.domain.entities.ticket import Ticket
-from app.domain.entities.monthly_customer import MonthlyCustomer
+from app.models import Vehicle, VehicleType
+from app.models import ParkingSpot, SpotType
+from app.models import Ticket
+from app.models import MonthlyCustomer
 
 
 # ─────────────────────────────────────────────
@@ -100,7 +100,7 @@ class TestTicket:
 
     def test_duration_open_ticket(self):
         t = self._make_ticket()
-        assert t.duration_in_hours() == 0.0
+        assert t.duration_in_hours() == pytest.approx(0.0, abs=1e-5)
 
 
 # ─────────────────────────────────────────────

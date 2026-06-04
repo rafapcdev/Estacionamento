@@ -10,11 +10,11 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from app.infrastructure.database.database import create_tables
-from app.api.routes.vehicle_router import router as vehicle_router
-from app.api.routes.parking_spot_router import router as spot_router
-from app.api.routes.ticket_router import router as ticket_router
-from app.api.routes.monthly_customer_router import router as monthly_router
+from app.database import create_tables
+from app.controllers.vehicle_controller import router as vehicle_router
+from app.controllers.parking_spot_controller import router as spot_router
+from app.controllers.ticket_controller import router as ticket_router
+from app.controllers.monthly_customer_controller import router as monthly_router
 
 
 # ─────────────────────────────────────────────

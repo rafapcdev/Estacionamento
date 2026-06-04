@@ -7,8 +7,8 @@ Verifica cada implementação de BillingStrategy e o BillingService.
 import pytest
 from decimal import Decimal
 
-from app.domain.strategies.billing_strategy import HourlyBilling, FixedBilling, DailyBilling
-from app.application.services.billing_service import BillingService
+from app.services.billing_strategy import HourlyBilling, FixedBilling, DailyBilling
+from app.services.billing_service import BillingService
 
 
 class TestHourlyBilling:

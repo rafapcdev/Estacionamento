@@ -9,20 +9,20 @@ import pytest
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
-from app.infrastructure.database.database import Base
-from app.infrastructure.repositories.vehicle_repository import SQLAlchemyVehicleRepository
-from app.infrastructure.repositories.parking_spot_repository import SQLAlchemyParkingSpotRepository
-from app.infrastructure.repositories.ticket_repository import SQLAlchemyTicketRepository
-from app.infrastructure.repositories.monthly_customer_repository import SQLAlchemyMonthlyCustomerRepository
+from app.database import Base
+from app.repositories.vehicle_repository import SQLAlchemyVehicleRepository
+from app.repositories.parking_spot_repository import SQLAlchemyParkingSpotRepository
+from app.repositories.ticket_repository import SQLAlchemyTicketRepository
+from app.repositories.monthly_customer_repository import SQLAlchemyMonthlyCustomerRepository
 
-from app.application.services.billing_service import BillingService
-from app.application.services.monthly_customer_service import MonthlyCustomerService
-from app.application.services.parking_spot_service import ParkingSpotService
-from app.application.services.entry_service import EntryService
-from app.application.services.exit_service import ExitService
+from app.services.billing_service import BillingService
+from app.services.monthly_customer_service import MonthlyCustomerService
+from app.services.parking_spot_service import ParkingSpotService
+from app.services.entry_service import EntryService
+from app.services.exit_service import ExitService
 from fastapi.testclient import TestClient
 from main import app
-from app.infrastructure.database.database import get_db
+from app.database import get_db
 
 
 # ─────────────────────────────────────────────
@@ -115,4 +115,3 @@ def client(db_session):
     with TestClient(app) as c:
         yield c
     app.dependency_overrides.clear()
-
