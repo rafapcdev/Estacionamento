@@ -8,7 +8,7 @@ from typing import List
 
 from fastapi import APIRouter, Depends, HTTPException, status
 
-from app.dependencies import get_vehicle_repo, get_spot_service
+from app.dependencies import get_vehicle_repo
 from app.schemas.vehicle_schema import VehicleCreateRequest, VehicleResponse
 from app.models import Vehicle
 from app.repositories.vehicle_repository import SQLAlchemyVehicleRepository

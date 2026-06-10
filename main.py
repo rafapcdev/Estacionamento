@@ -6,11 +6,13 @@ as tabelas do banco de dados existem antes de servir as requisições.
 """
 
 from contextlib import asynccontextmanager
+import time
 
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.database import create_tables
+from app.logger import logger
 from app.controllers.vehicle_controller import router as vehicle_router
 from app.controllers.parking_spot_controller import router as spot_router
 from app.controllers.ticket_controller import router as ticket_router
@@ -59,6 +61,27 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# ─────────────────────────────────────────────
+# Middleware de Logging
+# ─────────────────────────────────────────────
+@app.middleware("http")
+async def log_requests(request: Request, call_next):
+    start_time = time.time()
+    
+    # Registra a chegada da requisição
+    logger.info(f"Recebido: {request.method} {request.url.path}")
+    
+    # Processa a requisição
+    response = await call_next(request)
+    
+    process_time = (time.time() - start_time) * 1000
+    formatted_process_time = f"{process_time:.2f}ms"
+    
+    # Registra a saída com o status code e tempo
+    logger.info(f"Concluído: {request.method} {request.url.path} - Status: {response.status_code} - Tempo: {formatted_process_time}")
+    
+    return response
 
 # ─────────────────────────────────────────────
 # Registro de routers

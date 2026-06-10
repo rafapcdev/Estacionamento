@@ -1,0 +1,3 @@
+# Ignorar arquivos de log na pasta logs, mas manter a pasta
+*.log
+!.gitkeep
